@@ -1,8 +1,8 @@
 #include<iostream>
 
-#include<opencv2\core.hpp>
-#include<opencv2\highgui.hpp>
-#include<opencv2\imgproc.hpp>
+#include<opencv2/core.hpp>
+#include<opencv2/highgui.hpp>
+#include<opencv2/imgproc.hpp>
 
 using namespace std;
 using namespace cv;
@@ -22,13 +22,14 @@ const int iHighV = 100* 255 / 100;
 
 int main(int argc, char ** argv)
 {
-	VideoCapture cap(0);
+	VideoCapture cap(1);
 	
 	if (!cap.isOpened())
 	{
 		cout << "error: open the cap failed" << endl;
 		return -1;
 	}
+	else cout <<"the camera4 open successful"<< endl;
 
 
 	namedWindow("Camera1");
@@ -36,12 +37,15 @@ int main(int argc, char ** argv)
 	{
 		Mat frame;
 		cap >> frame;
-		frame=Findcolor(frame);
-		frame = Getcircle(frame);					//»ô·ò±ä»»Ñ°ÕÒÔ²
-		//frame=Getmaxcontour(frame);				//Ñ°ÕÒ×î´óÁ¬Í¨Óò
-		imshow("Camera1", frame);
-		if(waitKey(15)>=0)
+		//frame=Findcolor(frame);
+		//frame = Getcircle(frame);					//å¯»æ‰¾åˆ°åˆé€‚çš„åœ†å½¢
+		//frame=Getmaxcontour(frame);				//å¯»æ‰¾äºŒå€¼å›¾åƒæœ€å¤§çš„è¿é€šåŸŸ
+		imshow("Camera1", frame);                 //æ˜¾ç¤ºå›¾åƒ
+		cout<<"successful"<<endl;
+		if (waitKey(30) >= 0)
+		{
 			break;
+		}
 	}
 
 	cap.release();
@@ -54,27 +58,26 @@ Mat Findcolor(Mat frame)
 {
 	Mat HSV_image;
 
-	cvtColor(frame, HSV_image, COLOR_RGB2HSV);  //×ªÎªHSVÄ£Ê½
-	GaussianBlur(frame, frame, Size(9, 9), 0, 0);  //¸ßË¹ÂË²¨
+	cvtColor(frame, HSV_image, COLOR_RGB2HSV);  //è½¬æ¢æˆHSVæ ¼å¼
+	GaussianBlur(frame, frame, Size(5, 5), 0, 0);  //é«˜æ–¯æ»¤æ³¢
 
 	Mat Thre_image;
 	inRange(HSV_image, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), Thre_image);
 
-	//¿ª²Ù×÷ (È¥³ıÒ»Ğ©Ôëµã)  Èç¹û¶şÖµ»¯ºóÍ¼Æ¬¸ÉÈÅ²¿·ÖÒÀÈ»ºÜ¶à£¬Ôö´óÏÂÃæµÄsize
-	Mat element = getStructuringElement(MORPH_RECT, Size(5, 5));
+	//å¼€é—­æ“ä½œ
+	Mat element = getStructuringElement(MORPH_RECT, Size(3, 3));
 	morphologyEx(Thre_image, Thre_image, MORPH_OPEN, element);
 
-	//±Õ²Ù×÷ (Á¬½ÓÒ»Ğ©Á¬Í¨Óò)  
 	morphologyEx(Thre_image, Thre_image, MORPH_CLOSE, element);
 
 	return Thre_image;
 }
 
-Mat Getcircle(Mat frame)          //ÕÒµ½Ô²
+Mat Getcircle(Mat frame)          //ï¿½Òµï¿½Ô²
 {
 	vector<Vec3f> circles;
 
-	HoughCircles(frame, circles, CV_HOUGH_GRADIENT, 1.5, 20, 150, 80, 0, 0); //Í¼ÏñÖĞÑ°ÕÒÔ²
+	HoughCircles(frame, circles, CV_HOUGH_GRADIENT, 1.5, 20, 150, 80, 0, 0); //Í¼ï¿½ï¿½ï¿½ï¿½Ñ°ï¿½ï¿½Ô²
 
 	Mat result; //= Mat::zeros(frame.rows, frame.cols, CV_8UC3);
 	cvtColor(frame, result, CV_GRAY2BGR);
@@ -93,14 +96,14 @@ Mat Getcircle(Mat frame)          //ÕÒµ½Ô²
 
 
 
-Mat Getmaxcontour(Mat frame)        //Ñ°ÕÒÂÖÀªÖĞµÄ×î´óÖµ
+Mat Getmaxcontour(Mat frame)        //Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½Öµ
 {
-	vector<vector<Point>> contours;   //ÂÖÀª
+	vector< vector<Point> > contours;   //ï¿½ï¿½ï¿½ï¿½
 
 	Mat frametemp;
 	frame.copyTo(frametemp);
 
-	findContours(frametemp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);  //Ñ°ÕÒÂÖÀª
+	findContours(frametemp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);  //Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 	double maxArea = 0;
 	vector<Point> maxContour;
@@ -112,7 +115,7 @@ Mat Getmaxcontour(Mat frame)        //Ñ°ÕÒÂÖÀªÖĞµÄ×î´óÖµ
 		if (area > maxArea)
 		{
 			maxArea = area;
-			maxContour = contours[i];  //Ñ°ÕÒ×î´óÂÖÀª
+			maxContour = contours[i];  //Ñ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 			maxContourIndx = i;
 		}
 	}
@@ -124,7 +127,7 @@ Mat Getmaxcontour(Mat frame)        //Ñ°ÕÒÂÖÀªÖĞµÄ×î´óÖµ
 	/*frame.copyTo(result);
 
 	Rect maxRect = boundingRect(maxContour);
-	rectangle(result, maxRect, cv::Scalar(255));*/   //¿ìÀÖ½â¾öokßÕßÕ
+	rectangle(result, maxRect, cv::Scalar(255));*/   //ï¿½ï¿½ï¿½Ö½ï¿½ï¿½okï¿½ï¿½ï¿½ï¿½
 
 	return result;
 }
