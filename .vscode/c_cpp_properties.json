@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "opencv2.4",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/local/opencv2.4.13/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/g++",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

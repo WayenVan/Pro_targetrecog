@@ -1,0 +1,88 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "g++",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                "${file}",
+                "-I/usr/local/opencv2.4.13/include",
+                "-L/usr/local/opencv2.4.13/lib",
+                "-lopencv_calib3d",
+                "-lopencv_contrib",
+                "-lopencv_core",
+                "-lopencv_features2d",
+                "-lopencv_flann",
+                "-lopencv_gpu",
+                "-lopencv_highgui",
+                "-lopencv_imgproc",
+                "-lopencv_legacy",
+                "-lopencv_ml",
+                "-lopencv_nonfree",
+                "-lopencv_objdetect",
+                "-lopencv_ocl",
+                "-lopencv_photo",
+                "-lopencv_stitching",
+                "-lopencv_superres",
+                "-lopencv_ts",
+                "-lopencv_video",
+                "-lopencv_videostab",
+                "-lrt",
+                "-lpthread",
+                "-lm",
+                "-ldl",
+                "-o",
+                "${file}.out",
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+
+
+        {   
+            "label": "g++_arm",                                   //生成arm板上的任务
+            "type": "shell",
+            "command": "arm-linux-g++",
+            "args": [
+                "-g",
+                "${file}",
+                "-I/home/wayen/arm/opencv_arm/opencv_install/include",
+                "-L/home/wayen/arm/opencv_arm/opencv_install/lib",
+                "-lopencv_calib3d",
+                "-lopencv_contrib",
+                "-lopencv_core",
+                "-lopencv_features2d",
+                "-lopencv_flann",
+                "-lopencv_gpu",
+                "-lopencv_highgui",
+                "-lopencv_imgproc",
+                "-lopencv_legacy",
+                "-lopencv_ml",
+                "-lopencv_nonfree",
+                "-lopencv_objdetect",
+                "-lopencv_ocl",
+                "-lopencv_photo",
+                "-lopencv_stitching",
+                "-lopencv_superres",
+                "-lopencv_ts",
+                "-lopencv_video",
+                "-lopencv_videostab",
+                "-lrt",
+                "-lpthread",
+                "-lm",
+                "-ldl",
+                "-o",
+                "￥{file}.out",
+            ],
+            "problemMatcher": [],
+            "group": "build"
+        }
+    ]
+}
