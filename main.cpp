@@ -34,7 +34,8 @@ const int iHighV = 100* 255 / 100;
 int main(int argc, char ** argv)
 {
 	VideoCapture cap(0);
-	//cap.set(CV_CAP_PROP_FRAME_WIDTH,1280);
+	Point target_center;
+	//cap.set(CV_CAP_PROP_FRAME_WIDTH,1280);       //改变摄像头像素，暂时不可用
    	//cap.set(CV_CAP_PROP_FRAME_HEIGHT,720);
 
 	
@@ -52,12 +53,11 @@ int main(int argc, char ** argv)
 		Mat frame;
 		cap >> frame;
 		
-		frame=Findcolor(frame);	
-		frame=Getmaxcontour(frame);				//寻找二值图像最大的连通域
-		frame = Getcircle(frame);					//寻找到合适的圆形
+		frame=Findcolor(frame);	                //寻找相应的颜色区域，输出二值图像
+		frame=Getmaxcontour(frame);				//寻找二值图像最大的连通域，输出二值图像
+		frame = Getcircle(frame);					//寻找到合适的圆形,输出三通道图像
 
 		imshow("Camera1", frame);                 //显示图像
-		cout<<"successful"<<frame.rows<<frame.cols<<endl;
 		if (waitKey(30) >= 0)
 		{
 			break;
@@ -119,7 +119,7 @@ Mat Getmaxcontour(Mat frame)        //寻找最大连通域函数
 	Mat frametemp;
 	frame.copyTo(frametemp);
 
-	findContours(frametemp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);  //Ѱ������
+	findContours(frametemp, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);  //
 
 	double maxArea = 0;
 	vector<Point> maxContour;
@@ -131,7 +131,7 @@ Mat Getmaxcontour(Mat frame)        //寻找最大连通域函数
 		if (area > maxArea)
 		{
 			maxArea = area;
-			maxContour = contours[i];  //Ѱ���������
+			maxContour = contours[i];  //
 			maxContourIndx = i;
 		}
 	}

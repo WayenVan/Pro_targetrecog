@@ -6,7 +6,7 @@
     "configurations": [
         
         {
-            "name": "C++ laumch(GDB)",
+            "name": "C++ launch(GDB)",
             "type": "cppdbg",
             "request": "launch",
             "program": "${file}.out",
