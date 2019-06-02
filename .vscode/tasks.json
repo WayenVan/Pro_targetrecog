@@ -79,7 +79,7 @@
                 "-lm",
                 "-ldl",
                 "-o",
-                "￥{file}.out",
+                "${file}.arm.out",
             ],
             "problemMatcher": [],
             "group": "build"

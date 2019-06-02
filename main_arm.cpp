@@ -9,6 +9,7 @@
 #include<opencv2/imgproc.hpp>
 
 #include<iostream>
+#include<ctime>
 
 
 using namespace std;
@@ -28,7 +29,9 @@ void clearLeastArea(Mat& src);
 
 
 int main(int argc, char** argv) {
-
+/*-------------------计算程序的运行时间------------------*/
+	clock_t startTime,endTime;
+	startTime = clock();
 /*--------------------图像读取和预处理-------------------*/
 	Mat img_src = imread("1.jpg");
 
@@ -92,7 +95,7 @@ int main(int argc, char** argv) {
 	DrawSelectLines(img_riverroc_3u, prunedLines);
 
 	cout <<"prunedLines:"<<prunedLines.size() << endl;
-	imshow("lines", img_riverroc_3u);
+	//imshow("lines", img_riverroc_3u);
 
 	//ROI区域的提取
 	Mat mask;
@@ -100,7 +103,7 @@ int main(int argc, char** argv) {
 	cvtColor(mask, mask, CV_GRAY2BGR);
 	bitwise_and(img_riverroc_rslt, mask, img_riverroc_rslt);
 
-	imshow("riverroc_rslt", img_riverroc_rslt);    //显示相关内容
+	//imshow("riverroc_rslt", img_riverroc_rslt);    //显示相关内容
 /*-----------------------目标检测-----------------------*/
 	//准备阶段定义主要图片
 	Mat target_roc;
@@ -136,9 +139,9 @@ int main(int argc, char** argv) {
 	Mat target_S_edge = target_edges.at(1);
 	Mat target_V_edge = target_edges.at(2);
 
-	imshow("edge_H", target_H_edge);
-	imshow("edge_S", target_S_edge);
-	imshow("edge_V", target_V_edge);
+	//imshow("edge_H", target_H_edge);
+	//imshow("edge_S", target_S_edge);
+	//imshow("edge_V", target_V_edge);
 
 	//DS边缘信息融合
 	Mat target_verge = VergeHSV(target_H_edge, target_S_edge, target_V_edge);
@@ -146,7 +149,7 @@ int main(int argc, char** argv) {
 
 	//形态学降噪
 	target_verge = Morph(target_verge);
-	imshow("verge", target_verge);
+	//imshow("verge", target_verge);
 
 	//连通域标记法
 	Mat target_label;
@@ -154,7 +157,7 @@ int main(int argc, char** argv) {
 
 	//保留最大连通域
 	target_label=LargestArea(target_label);
-	imshow("label", target_label);
+	//imshow("label", target_label);
 
 	//寻找图像重心
 	Point2f centroid;
@@ -166,8 +169,12 @@ int main(int argc, char** argv) {
 	Mat target_rslt;
 	img_src_cprs.copyTo(target_rslt);
 	circle(target_rslt, centroid, 2, Scalar(0,125,245), 2, CV_AA);//绘制图形中
-	imshow("result", target_rslt);
-	waitKey();
+	//imshow("result", target_rslt);
+	//waitKey();
+
+	//结束计时
+	endTime = clock();
+	cout << "the run time is: " <<(double)(endTime - startTime) / CLOCKS_PER_SEC << "s" <<endl;
 
 	return 1;
 }
